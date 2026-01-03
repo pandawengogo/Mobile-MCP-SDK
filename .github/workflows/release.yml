@@ -50,6 +50,7 @@ jobs:
       
       - name: Build release artifacts
         run: |
+          chmod +x gradlew
           ./gradlew clean
           ./gradlew :mcp-annotations:build
           ./gradlew :mcp-compiler:jar

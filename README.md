@@ -1,68 +1,63 @@
-# NanoMCP SDK - Android 移动端 AI 适配器
+# 🚀 NanoMCP: 移动端 AI 适配器 SDK
 
-让任何 Android App 能零门槛接入 MCP (Model Context Protocol) 生态，成为 AI 的"手"和"眼"。
+**让任何 Android App 能零门槛接入 MCP (Model Context Protocol) 生态，成为 AI 的"手"和"眼"。**
 
-## 产品定位
+## 📦 下载
 
-**一句话定义**: 移动端 App 的 AI 适配器
+请访问 [Releases](https://github.com/pandawengogo/Mobile-MCP-SDK/releases) 页面下载最新版本的打包文件：
 
-**类比理解**:
-- 就像 USB 驱动程序让硬件能被电脑识别
-- 就像支付宝 SDK 让 App 能接入支付能力
-- 我们让 App 能被 AI 识别和调用
+- `nanomcp-sdk-{version}.aar` - 主 SDK 库
+- `mcp-annotations-{version}.jar` - 注解库（编译时依赖）
+- `mcp-compiler-{version}.jar` - KSP 编译器（编译时依赖）
 
-## ⚠️ 重要提示
+所有文件都包含 SHA256 校验和文件（`.sha256`），用于验证文件完整性。
 
-**首次使用请先在 Android Studio 中打开项目!**
+## 🚀 快速开始
 
-Android Studio 会自动:
-- 下载 Gradle Wrapper
-- 同步依赖
-- 配置 JDK
+### 1. 添加依赖
 
-详见 [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
-
-## 快速开始
-
-### 1. 添加依赖 (30秒)
-
-在你的 `app/build.gradle.kts` 中添加:
+将下载的 AAR 和 JAR 文件复制到你的 Android 项目的 `libs` 目录，然后在 `build.gradle.kts` 中添加：
 
 ```kotlin
 plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp") version "1.9.22-1.0.17"
 }
 
 dependencies {
-    implementation(project(":mcp-api"))
-    implementation(project(":mcp-core"))
-    ksp(project(":mcp-compiler"))
+    // NanoMCP SDK
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.aar"))))
+    compileOnly(files("libs/mcp-annotations-{version}.jar"))
+    ksp(files("libs/mcp-compiler-{version}.jar"))
+    
+    // 必需的第三方依赖
+    implementation("androidx.biometric:biometric:1.1.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 ```
 
-### 2. 定义工具函数 (5分钟)
+### 2. 定义工具函数
 
 ```kotlin
-import com.nanomcp.api.McpTool
-import com.nanomcp.api.McpParam
+import com.nanomcp.annotations.McpTool
+import com.nanomcp.annotations.McpParam
 
-@McpTool(description = "调节屏幕亮度")
-fun setBrightness(@McpParam("亮度 0-100") level: Int) {
+@McpTool(description = "添加待办事项")
+fun addTodo(
+    @McpParam("待办内容") title: String,
+    @McpParam("优先级") priority: Int = 0
+): String {
     // 你的实现代码
-}
-
-@McpTool(description = "发送通知")
-fun sendNotification(
-    @McpParam("标题") title: String,
-    @McpParam("内容") body: String
-) {
-    // 你的实现代码
+    return "已添加：$title"
 }
 ```
 
-### 3. 启动 SDK (2分钟)
+### 3. 启动 SDK
 
 ```kotlin
+import com.nanomcp.core.McpServer
+
 class MainActivity : AppCompatActivity() {
     private lateinit var mcpServer: McpServer
     
@@ -71,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         
         // 初始化并启动
         mcpServer = McpServer(port = 8080)
-        mcpServer.registerGeneratedTools()  // 自动生成的扩展函数
+        mcpServer.registerGeneratedTools()
         mcpServer.start()
         
         // 显示 Token (用于 AI 连接)
@@ -85,146 +80,45 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-## 项目结构
+## ✨ 核心特性
 
-```
-NanoMCP/
-├── mcp-api/           # 注解定义层 (< 10KB)
-├── mcp-core/          # 运行时引擎 (< 150KB)
-├── mcp-compiler/      # KSP 编译插件 (不打包进 APK)
-└── sample-app/        # 演示应用
-```
+- **⚡️ 零侵入** - 只需加注解，不改原有代码
+- **🔒 类型安全** - 编译时验证参数类型，运行时无反射
+- **📦 极致轻量** - 总体积 < 200KB
+- **🚀 开箱即用** - 3 步接入，10 分钟上手
+- **🛡️ 安全可控** - Token 认证机制，局域网隔离
 
-## 核心特性
+## 📋 系统要求
 
-### 1. 零侵入
-- 只需加注解，不改原有代码
-- 无需继承基类或实现接口
+- **最低 Android 版本**: API 21 (Android 5.0)
+- **目标 Android 版本**: API 34 (Android 14)
+- **Kotlin 版本**: 1.9.22+
+- **Gradle 版本**: 8.3.0+
 
-### 2. 类型安全
-- 编译时验证参数类型
-- 运行时无反射，性能卓越
+## 🔧 ProGuard 配置
 
-### 3. 极致轻量
-- mcp-api: < 10KB
-- mcp-core: < 150KB (含 NanoHTTPD)
-- 总体积 < 200KB (一张图片的大小)
+如果你的项目启用了混淆，请在 `proguard-rules.pro` 中添加：
 
-### 4. 开箱即用
-- 3 步接入，10 分钟上手
-- 自动生成注册代码
-
-### 5. 安全可控
-- Token 认证机制
-- 局域网隔离
-
-## 工作原理
-
-```
-编译时:
-  开发者写 @McpTool 注解
-    ↓
-  KSP 扫描并生成注册代码
-    ↓
-  编译进 APK
-
-运行时:
-  App 启动 McpServer
-    ↓
-  监听 8080 端口
-    ↓
-  AI 发送 JSON-RPC 请求
-    ↓
-  SDK 解析并调用对应函数
-    ↓
-  返回结果给 AI
+```proguard
+# NanoMCP SDK
+-keep class com.nanomcp.generated.** { *; }
+-keepclassmembers class * {
+    @com.nanomcp.annotations.McpTool *;
+}
 ```
 
-## 测试验证
+## 📚 示例应用
 
-### 编译项目
+查看 `sample-app/` 目录获取完整的使用示例。
 
-```bash
-./gradlew build
-```
-
-### 运行示例 App
-
-```bash
-./gradlew :sample-app:installDebug
-```
-
-### 测试 API
-
-启动 App 后，使用 curl 测试:
-
-```bash
-# 获取工具列表
-curl -H "Authorization: Bearer <token>" \
-     http://localhost:8080 \
-     -d '{"method":"tools/list","params":{}}'
-
-# 调用工具
-curl -H "Authorization: Bearer <token>" \
-     -H "Content-Type: application/json" \
-     http://localhost:8080 \
-     -d '{"method":"tools/call","params":{"name":"add","arguments":{"a":10,"b":20}}}'
-```
-
-## MVP 限制
-
-- 仅支持基础类型参数 (Int, String, Boolean, Double, Long)
-- 仅前台运行 (App 进入后台服务器会停止)
-- 无持久化配置 (每次启动生成新 Token)
-- 无 WebSocket/SSE 支持 (仅 HTTP)
-
-## 后续扩展
-
-**Phase 2** (1个月后):
-- 支持复杂类型 (List, Map, 自定义类)
-- Foreground Service 保活
-- Token 持久化
-
-**Phase 3** (3个月后):
-- WebSocket 双向通信
-- 请求日志和监控面板
-- 权限细粒度控制
-
-**Phase 4** (6个月后):
-- iOS Swift Package 版本
-- Flutter/React Native 桥接
-- 云端 MCP Hub (可选)
-
-## 技术架构
-
-### 三大核心模块
-
-1. **mcp-api** - "傻瓜开关"
-   - 定义注解和接口
-   - 零依赖，极轻量
-
-2. **mcp-core** - "嵌入式服务器"
-   - NanoHTTPD HTTP Server
-   - JSON-RPC 路由
-   - Token 认证
-   - 工具注册表
-
-3. **mcp-compiler** - "隐形魔法师"
-   - KSP 处理器
-   - 编译时代码生成
-   - JSON Schema 生成
-
-## 许可证
+## 🔒 许可证
 
 MIT License
 
-## 联系方式
+## 💬 技术支持
 
-- GitHub: https://github.com/yourusername/nanomcp
-- Email: your@email.com
+如有问题或建议，请通过 GitHub Issues 联系我们。
 
 ---
 
 **让移动端 App 拥抱 AI 时代！**
-
-

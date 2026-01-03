@@ -43,11 +43,24 @@ release-aars/
 *.kotlin_module
 
 # 源代码目录（重要：保护源代码，不提交到 GitHub）
-mcp-api/src/
-mcp-core/src/
-mcp-client/src/
-mcp-compiler/src/
-mcp-annotations/src/
-nanomcp-sdk/src/
+mcp-api/
+mcp-core/
+mcp-client/
+mcp-compiler/
+mcp-annotations/
+nanomcp-sdk/
+
+# Sample app（只提交编译后的产物，不提交源代码）
 sample-app/src/
 sample-app/build/
+
+# 文档和脚本（不提交到 GitHub，仅本地使用）
+docs/
+scripts/
+
+# 其他不需要的文件
+*.md
+!README.md
+*.txt
+*.sh
+!scripts/release-github.sh
