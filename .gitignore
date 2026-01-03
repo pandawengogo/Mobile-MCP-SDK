@@ -64,3 +64,4 @@ scripts/
 !README_CN.md
 *.txt
 *.sh
+publish-maven.gradle.kts
