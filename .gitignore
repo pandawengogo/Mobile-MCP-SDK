@@ -1,0 +1,53 @@
+# Gradle
+.gradle/
+build/
+*/build/
+!gradle-wrapper.jar
+
+# Android
+*.apk
+*.ap_
+*.aab
+local.properties
+.navigation/
+captures/
+output.json
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+# Maven 发布凭证 (重要!)
+gradle.properties.local
+**/gradle.properties
+!gradle.properties.template
+
+# 敏感信息
+mavenUsername=*
+mavenPassword=*
+signing.keyId=*
+signing.password=*
+signing.key=*
+
+# 发布产物（本地构建）
+release/
+release-aars/
+*.aar
+*.jar
+
+# GitHub 发布产物（允许提交）
+!github-release/
+
+# Kotlin
+*.kotlin_module
+
+# 源代码目录（重要：保护源代码，不提交到 GitHub）
+mcp-api/src/
+mcp-core/src/
+mcp-client/src/
+mcp-compiler/src/
+mcp-annotations/src/
+nanomcp-sdk/src/
+sample-app/src/
+sample-app/build/

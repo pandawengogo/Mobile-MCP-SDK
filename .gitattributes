@@ -1,0 +1,38 @@
+# GitHub 仓库导出规则
+# 确保源代码不会被导出到 GitHub Releases
+
+# 排除所有源代码目录（不导出到 GitHub）
+mcp-api/ export-ignore
+mcp-core/ export-ignore
+mcp-client/ export-ignore
+mcp-compiler/ export-ignore
+mcp-annotations/src/ export-ignore
+nanomcp-sdk/src/ export-ignore
+sample-app/ export-ignore
+
+# 排除内部文档（不导出）
+*.md export-ignore
+!GITHUB_README.md
+!GITHUB_SETUP.md
+!README.md
+
+# 排除构建目录
+build/ export-ignore
+*/build/ export-ignore
+.gradle/ export-ignore
+
+# 排除 IDE 文件
+.idea/ export-ignore
+*.iml export-ignore
+
+# 排除本地配置
+local.properties export-ignore
+gradle.properties.local export-ignore
+
+# 排除发布目录（本地构建）
+release/ export-ignore
+release-aars/ export-ignore
+
+# 允许 GitHub 发布目录（使用正确语法）
+!github-release/
+
