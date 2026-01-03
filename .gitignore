@@ -65,3 +65,13 @@ scripts/
 *.txt
 *.sh
 publish-maven.gradle.kts
+
+# Gradle 构建文件（不提交）
+build.gradle.kts
+settings.gradle.kts
+gradlew
+gradlew.bat
+gradle/
+
+# GitHub Actions（不提交）
+.github/
