@@ -61,6 +61,6 @@ scripts/
 # 其他不需要的文件
 *.md
 !README.md
+!README_CN.md
 *.txt
 *.sh
-!scripts/release-github.sh
