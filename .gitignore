@@ -50,9 +50,8 @@ mcp-compiler/
 mcp-annotations/
 nanomcp-sdk/
 
-# Sample app（只提交编译后的产物，不提交源代码）
-sample-app/src/
-sample-app/build/
+# Sample app（不提交）
+sample-app/
 
 # 文档和脚本（不提交到 GitHub，仅本地使用）
 docs/
@@ -75,3 +74,6 @@ gradle/
 
 # GitHub Actions（不提交）
 .github/
+
+# Git 配置文件（不提交）
+.gitattributes
